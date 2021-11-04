@@ -1,20 +1,37 @@
 // acquire references to page elements
-var nameSpan = document.querySelector('span')
-var formEl = document.querySelector('form')
-var clear = document.querySelector('#clear')
-var textarea = document.querySelector('textarea')
+const nameSpan = document.querySelector('span');
+const formEl = document.querySelector('form');
+const clearBtn = document.getElementById('clear');
+const saveBtn =document.getElementById('save');
+const textarea = document.querySelector('textarea');
+
+
 
 // Retrieve name and note content from cookies and localstorage
+var cookies = document.cookie.split(";");
+var nameCookie = cookies.find(function(cookie){
+  return cookie.startsWith('name')
+})
+if(nameCookie){
+  nameSpan.textContent = nameCookie.split('=')[1];
+}
+
+
+
+var notes = localStorage.getItem('notes');
+textarea.value = notes;
 // Then apply them to elements on the page
-// YOUR CODE HERE
+
 
 formEl.onsubmit = function(e) {
-  // prevents form submission
-  e.preventDefault()
+  e.preventDefault();
   // save name element's content to cookies
   // save textarea's content to localstorage
-  // YOUR CODE HERE
-
+  let nameCookie = nameSpan.textContent;
+  document.cookie = "name=" + nameCookie + ";"
+  
+  notes = textarea.value;
+  localStorage.setItem('notes', notes);
   // triggers thumbs up animation
   this.elements.save.classList.add('emoji')
 }
@@ -23,7 +40,8 @@ clear.onclick = function() {
   // Clear textarea's value
   // Clear localstorage's content
   // YOUR CODE HERE
-
+  textarea.value ="";
+  localStorage.removeItem('notes');
   // triggers thumbs up animation
   this.classList.add('emoji')
 }
